@@ -19,3 +19,10 @@ class TrackerIssue(Model):
     labels = db.StringListProperty()
 
     comment_count = db.IntegerProperty(default=0)
+
+
+class TrackerIssueComment(Model):
+    issue_id = db.IntegerProperty(required=True)
+    date_created = db.DateTimeProperty(auto_now_add=True)
+    author = db.UserProperty()
+    text = db.TextProperty()

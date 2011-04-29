@@ -51,7 +51,9 @@ class SubmitAction(Action):
 
     def get_issue(self):
         issue = model.TrackerIssue()
-        issue.author = users.get_current_user()
+        user = users.get_current_user()
+        if user is not None:
+            issue.author = user
         return issue
 
 
@@ -66,13 +68,36 @@ class ViewAction(Action):
     template = 'view.tpl'
 
     def get(self):
+        issue_id = int(self.rh.request.get('id'))
         self.render({
-            'issue': model.TrackerIssue.gql('WHERE id = :1', int(self.rh.request.get('id'))).get(),
+            'issue': model.TrackerIssue.gql('WHERE id = :1', issue_id).get(),
+            'comments': model.TrackerIssueComment.gql('WHERE issue_id = :1 ORDER BY date_created', issue_id).fetch(100),
         })
+
+
+class CommentAction(Action):
+    def post(self):
+        issue_id = int(self.rh.request.get('id', '0'))
+        if not issue_id:
+            raise Exception('Issue id not specified.')
+
+        issue = model.TrackerIssue.gql('WHERE id = :1', issue_id).get()
+        if issue is None:
+            raise Exception('Issue %u does not exist.' % issue_id)
+
+        comment = model.TrackerIssueComment(issue_id=issue_id)
+        author = users.get_current_user()
+        if author is not None:
+            comment.author = author
+        comment.text = self.rh.request.get('text')
+        comment.put()
+
+        self.rh.redirect(self.rh.request.path + '?action=view&id=' + str(issue_id))
 
 
 class Tracker(webapp.RequestHandler):
     handlers = {
+        'comment': CommentAction,
         'edit': EditAction,
         'submit': SubmitAction,
         'view': ViewAction,

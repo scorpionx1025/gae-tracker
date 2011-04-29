@@ -8,7 +8,7 @@ div.field label { display: block; margin: .25em 0; }
 div.field .text { width: 800px; padding: 2px 4px; }
 div.field textarea { height: 200px; }
 
-div.box { border: solid 1px #ccc; max-width: 800px; padding: .5em; }
+div.box { border: solid 1px #ccc; max-width: 800px; padding: .5em; margin: 0 0 1em; }
 div.box p { margin: 0 0 .5em; }
 
 p.meta { color: gray; font-size: 80%; }
