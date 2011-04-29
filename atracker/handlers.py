@@ -23,17 +23,19 @@ class SubmitAction(Action):
 
     def get(self):
         self.render({
-            'status': 'ok',
+            'issue': self.get_issue(),
+            'path': self.rh.request.path,
         })
 
     def post(self):
-        issue = model.TrackerIssue()
-        issue.author = users.get_current_user()
+        issue = self.get_issue()
 
         for k in self.rh.request.arguments():
             v = self.rh.request.get(k)
             if k == 'f.labels':
                 issue.labels = [l.strip() for l in v.split(',') if l.strip()]
+            elif k == 'f.owner':
+                issue.owner = users.User(v)
             elif k.startswith('f.'):
                 setattr(issue, k[2:], v)
 
@@ -47,6 +49,18 @@ class SubmitAction(Action):
 
         self.rh.redirect(self.rh.request.path + '?action=view&id=' + str(issue.id))
 
+    def get_issue(self):
+        issue = model.TrackerIssue()
+        issue.author = users.get_current_user()
+        return issue
+
+
+class EditAction(SubmitAction):
+    template = 'edit.tpl'
+
+    def get_issue(self):
+        return model.TrackerIssue.gql('WHERE id = :1', int(self.rh.request.get('id'))).get()
+
 
 class ViewAction(Action):
     template = 'view.tpl'
@@ -59,6 +73,7 @@ class ViewAction(Action):
 
 class Tracker(webapp.RequestHandler):
     handlers = {
+        'edit': EditAction,
         'submit': SubmitAction,
         'view': ViewAction,
     }
