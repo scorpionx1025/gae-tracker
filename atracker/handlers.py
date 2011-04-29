@@ -104,10 +104,15 @@ class ListAction(Action):
     template = 'list.tpl'
 
     def get(self):
-        issues = model.TrackerIssue.all().order('-date_created').fetch(1000)
+        label = self.rh.request.get('label')
+        if label:
+            issues = model.TrackerIssue.gql('WHERE labels = :1 ORDER BY date_created DESC', label).fetch(1000)
+        else:
+            issues = model.TrackerIssue.all().order('-date_created').fetch(1000)
         self.render({
             'issues': issues,
             'path': self.rh.request.path,
+            'filter': label,
         })
 
 

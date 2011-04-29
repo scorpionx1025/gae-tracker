@@ -8,6 +8,12 @@
       <div class="description">{{ issue.description|markdown }}</div>
     </div>
 
+    <ul class="labels">
+      {% for label in issue.labels %}
+        <li><a href="{{ path }}?action=list&amp;label={{ label|escape }}">{{ label|escape }}</a></li>
+      {% endfor %}
+    </ul>
+
     {% if comments %}
       <div id="comments">
         {% for comment in comments %}

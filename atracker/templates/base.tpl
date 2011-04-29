@@ -6,6 +6,7 @@ body, table { font-family: Ubuntu, sans-serif; font-size: 11pt; line-height: 1.2
 
 h1 { font: 20pt/25pt bold Ubuntu, sans-serif; }
 h2 { font: 14pt/20pt bold Ubuntu, sans-serif; }
+a { color: #008; }
 img { border: none; }
 
 div.field { margin: .5em 0 1em; }
@@ -14,7 +15,7 @@ div.field .text { width: 820px; padding: 4px 10px; border: solid 1px #ccc; }
 div.field textarea { height: 200px; }
 
 #issue .avatar { float: left; }
-div.box { border: solid 1px #ccc; max-width: 800px; padding: 10px; margin: 0 0 1em; }
+div.box { border: solid 1px #ccc; max-width: 700px; padding: 10px; margin: 0 0 1em; }
 div.box p { margin: 0 0 .5em; }
 div.box p:last-child { margin-bottom: 0; }
 
@@ -26,6 +27,10 @@ div.comment { min-height: 26px; }
 p.meta { color: gray; font-size: 80%; }
 p.meta span { visibility: hidden; }
 p.meta:hover span { visibility: visible; }
+
+#issue { position: relative; }
+#issue .labels { position: absolute; top: 0; left: 790px; list-style-type: none; margin: 0; padding: 0; font-size: 10pt; line-height: 1.5em; }
+#issue .labels a { color: green; }
 
 table { border-collapse: collapse; width: 100%; }
 td, th { border-bottom: solid 1px #ccc; padding: 2px 4px; vertical-align: top; }
