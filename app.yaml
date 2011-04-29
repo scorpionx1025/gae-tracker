@@ -1,4 +1,4 @@
-application: atracker
+application: gaetracker
 version: 1
 runtime: python
 api_version: 1
@@ -6,7 +6,7 @@ api_version: 1
 handlers:
 
 - url: /tracker
-  script: atracker
+  script: gaetracker
   login: required
 
 builtins:
