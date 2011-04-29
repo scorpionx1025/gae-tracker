@@ -29,7 +29,7 @@ p.meta span { visibility: hidden; }
 p.meta:hover span { visibility: visible; }
 
 #issue { position: relative; }
-#issue .labels { position: absolute; top: 0; left: 790px; list-style-type: none; margin: 0; padding: 0; font-size: 10pt; line-height: 1.5em; }
+#issue .labels { position: absolute; top: 0; left: 790px; list-style-type: none; margin: 0; padding: 0; font-size: 10pt; line-height: 1.5em; color: gray; }
 #issue .labels a { color: green; }
 
 table { border-collapse: collapse; width: 100%; }

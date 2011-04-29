@@ -10,7 +10,7 @@
 
     <ul class="labels">
       {% for label in issue.labels %}
-        <li><a href="{{ path }}?action=list&amp;label={{ label|escape }}">{{ label|escape }}</a></li>
+        <li>{{ label|format_label:path }}</li>
       {% endfor %}
     </ul>
 
