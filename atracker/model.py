@@ -20,6 +20,12 @@ class TrackerIssue(Model):
 
     comment_count = db.IntegerProperty(default=0)
 
+    def status(self):
+        for label in self.labels:
+            if label.lower().startswith('status-'):
+                return label[7:]
+        return 'New'
+
 
 class TrackerIssueComment(Model):
     issue_id = db.IntegerProperty(required=True)

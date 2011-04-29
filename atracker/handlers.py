@@ -35,7 +35,8 @@ class SubmitAction(Action):
             if k == 'f.labels':
                 issue.labels = [l.strip() for l in v.split(',') if l.strip()]
             elif k == 'f.owner':
-                issue.owner = users.User(v)
+                if v:
+                    issue.owner = users.User(v)
             elif k.startswith('f.'):
                 setattr(issue, k[2:], v)
 
@@ -96,10 +97,22 @@ class CommentAction(Action):
         self.rh.redirect(self.rh.request.path + '?action=view&id=' + str(issue_id))
 
 
+class ListAction(Action):
+    template = 'list.tpl'
+
+    def get(self):
+        issues = model.TrackerIssue.all().order('-date_created').fetch(1000)
+        self.render({
+            'issues': issues,
+            'path': self.rh.request.path,
+        })
+
+
 class Tracker(webapp.RequestHandler):
     handlers = {
         'comment': CommentAction,
         'edit': EditAction,
+        'list': ListAction,
         'submit': SubmitAction,
         'view': ViewAction,
     }
@@ -111,12 +124,11 @@ class Tracker(webapp.RequestHandler):
         self.call('post')
 
     def call(self, method):
-        action = self.request.get('action')
+        action = self.request.get('action', 'list')
         if action in self.handlers:
             getattr(self.handlers[action](self), method)()
         else:
             self.reply('Don\'t know how to handle action "%s".' % action)
-        
 
     def render(self, template_name, data, content_type='text/html'):
         logging.debug(data)

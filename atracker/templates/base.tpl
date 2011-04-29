@@ -1,7 +1,8 @@
 <html>
 <head>
 <style type="text/css">
-body { font-family: Ubuntu, sans-serif; font-size: 11pt; line-height: 1.25em; margin: 20px; padding: 0; background-color: white; color: black; }
+body { margin: 20px; padding: 0; background-color: white; color: black; }
+body, table { font-family: Ubuntu, sans-serif; font-size: 11pt; line-height: 1.25em; }
 
 h1 { font: 20pt/25pt bold Ubuntu, sans-serif; }
 h2 { font: 14pt/20pt bold Ubuntu, sans-serif; }
@@ -25,6 +26,13 @@ div.comment { min-height: 26px; }
 p.meta { color: gray; font-size: 80%; }
 p.meta span { visibility: hidden; }
 p.meta:hover span { visibility: visible; }
+
+table { border-collapse: collapse; width: 800px; }
+td, th { border-bottom: solid 1px #ccc; padding: 2px 4px; }
+thead th, tfoot th { color: gray; font-weight: normal; }
+table .id { text-align: right; }
+table .summary { text-align: left; width: 100%; }
+table .date { text-align: left; }
 </style>
 </head>
 <body>
