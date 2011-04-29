@@ -27,7 +27,7 @@
         <div class="field">
           <textarea name="text" class="text"></textarea>
         </div>
-        <input type="submit" value="Comment"/>
+        <input type="submit" value="Comment"/> or <a href="{{ path }}">go back to list</a>
       </form>
     </div>
   </div>

@@ -52,9 +52,11 @@ class SubmitAction(Action):
 
     def get_issue(self):
         issue = model.TrackerIssue()
+        issue.labels = [ 'Status-New' ]
         user = users.get_current_user()
         if user is not None:
             issue.author = user
+            issue.owner = user
         return issue
 
 
@@ -74,6 +76,7 @@ class ViewAction(Action):
             'issue': model.TrackerIssue.gql('WHERE id = :1', issue_id).get(),
             'comments': model.TrackerIssueComment.gql('WHERE issue_id = :1 ORDER BY date_created', issue_id).fetch(100),
             'user': users.get_current_user(),
+            'path': self.rh.request.path,
         })
 
 

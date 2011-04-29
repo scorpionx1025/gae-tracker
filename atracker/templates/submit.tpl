@@ -19,7 +19,7 @@
       <label>Labels:</label>
       <input type="text" name="f.labels" class="text" value="{% if issue.labels %}{% for label in issue.labels %}{{ label|escape }}{% if forloop.last %}{% else %}, {% endif %}{% endfor %}{% endif %}"/>
     </div>
-    <input type="submit" value="Submit"/>{% if issue.id %} or <a href="{{ path }}?action=view&amp;id={{ issue.id }}">cancel</a>{% endif %}
+    <input type="submit" value="Submit"/> or <a href="{{ path }}?{% if issue.id %}action=view&amp;id={{ issue.id }}{% endif %}">cancel</a>
   </form>
 </div>
 {% endblock %}

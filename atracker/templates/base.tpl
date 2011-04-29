@@ -27,11 +27,13 @@ p.meta { color: gray; font-size: 80%; }
 p.meta span { visibility: hidden; }
 p.meta:hover span { visibility: visible; }
 
-table { border-collapse: collapse; width: 800px; }
-td, th { border-bottom: solid 1px #ccc; padding: 2px 4px; }
+table { border-collapse: collapse; width: 100%; }
+td, th { border-bottom: solid 1px #ccc; padding: 2px 4px; vertical-align: top; }
 thead th, tfoot th { color: gray; font-weight: normal; }
 table .id { text-align: right; }
 table .summary { text-align: left; width: 100%; }
+table .summary a { text-decoration: none; }
+table .summary a:hover { text-decoration: underline; }
 table .date { text-align: left; }
 </style>
 </head>
