@@ -72,6 +72,7 @@ class ViewAction(Action):
         self.render({
             'issue': model.TrackerIssue.gql('WHERE id = :1', issue_id).get(),
             'comments': model.TrackerIssueComment.gql('WHERE issue_id = :1 ORDER BY date_created', issue_id).fetch(100),
+            'user': users.get_current_user(),
         })
 
 
