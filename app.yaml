@@ -1,0 +1,12 @@
+application: atracker
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+
+- url: /tracker
+  script: atracker
+
+builtins:
+- datastore_admin: on
