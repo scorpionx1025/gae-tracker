@@ -151,7 +151,7 @@ class Tracker(webapp.RequestHandler):
     def render(self, template_name, data, content_type='text/html'):
         data['path'] = self.request.path
         data['user'] = users.get_current_user()
-        logging.debug(u'Data for %s: %s' % (template_name, data))
+        # logging.debug(u'Data for %s: %s' % (template_name, data))
         filename = os.path.join(os.path.dirname(__file__), 'templates', template_name)
         self.reply(template.render(filename, data), content_type=content_type)
 
