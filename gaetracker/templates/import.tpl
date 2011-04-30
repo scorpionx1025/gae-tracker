@@ -7,6 +7,6 @@
   </div>
   <p>This must be a file like the one that you exported earlier.</p>
   <p>Issues will be imported in the background, so it can take some time for them to appear.</p>
-  <input type="submit" value="Start importing"/>
+  <input type="submit" value="Start importing"/> or <a href="{{ path }}">cancel</a>
 </form>
 {% endblock %}
