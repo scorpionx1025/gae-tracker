@@ -8,7 +8,7 @@ img { border: none; }
 
 div.field { margin: .5em 0 1em; }
 div.field label { display: block; margin: .25em 0; }
-div.field .text { width: 820px; padding: 4px 10px; border: solid 1px #ccc; }
+div.field .text { width: 720px; padding: 4px 10px; border: solid 1px #ccc; }
 div.field textarea { height: 200px; }
 
 #issue .avatar { float: left; }
