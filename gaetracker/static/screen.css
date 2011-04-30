@@ -35,6 +35,8 @@ thead th, tfoot th { color: gray; font-weight: normal; }
 table .id { text-align: right; }
 table .summary { text-align: left; width: 100%; }
 table .summary a { text-decoration: none; }
+table .summary a:first-child { margin-right: 1em; }
 table .summary a:hover { text-decoration: underline; }
+table .summary .label { font-size: 10pt; color: green; }
 table .owner { text-align: center; }
 table .date { text-align: left; }

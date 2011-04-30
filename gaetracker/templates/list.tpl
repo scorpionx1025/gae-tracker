@@ -28,7 +28,7 @@
         {% for c in columns %}
           <td class="extra">{{ issue|extra_column:c }}</td>
         {% endfor %}
-        <td class="summary"><a href="{{ path }}?action=view&amp;id={{ issue.id }}">{{ issue.summary|escape }}</a></td>
+        <td class="summary"><a href="{{ path }}?action=view&amp;id={{ issue.id }}">{{ issue.summary|escape }}</a>{{ issue|extra_labels }}</td>
         <td class="date">{{ issue.date_created|date:"d.m.y" }}</td>
       </tr>
     {% endfor %}

@@ -35,9 +35,19 @@ def format_label(label, path):
 @register.filter
 def extra_column(issue, b):
     prefix = b + '-'
+    path = os.environ['PATH_INFO']
     for label in issue.labels:
         if label.startswith(prefix):
             v = label[len(prefix):]
-            path = os.environ['PATH_INFO']
             return u'<a href="%s?action=list&amp;label=%s" title="Show label: %s">%s</a>' % (path, label, label, v)
     return ''
+
+
+@register.filter
+def extra_labels(issue):
+    output = u''
+    path = os.environ['PATH_INFO']
+    for label in issue.labels:
+        if '-' not in label and label not in ('Open', 'Closed'):
+            output += u' <a class="label" href="%s?action=list&amp;label=%s">%s</a>' % (path, label, label)
+    return output
