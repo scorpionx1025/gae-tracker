@@ -7,7 +7,9 @@ handlers:
 
 - url: /tracker
   script: gaetracker
-  login: required
+  login: admin
+- url: /gae-tracker/static/
+  static_dir: gaetracker/static
 
 builtins:
 - datastore_admin: on
