@@ -40,6 +40,9 @@
           <label>New labels:</label>
           <input type="text" name="labels" class="text" value="{% if issue.labels %}{% for label in issue.labels %}{{ label|escape }}{% if forloop.last %}{% else %}, {% endif %}{% endfor %}{% endif %}"/>
         </div>
+        <div class="field">
+          <label><input type="checkbox" {% if resolved %}checked="checked" {% endif %}name="resolved"/> This issue is resolved</label>
+        </div>
         <input type="submit" value="Comment"/> or <a href="{{ path }}">go back to list</a>
       </form>
     </div>

@@ -68,13 +68,23 @@ class ViewAction(Action):
         self.render({
             'issue': issue,
             'labels': sorted(issue.labels, key=lambda l: ('-' not in l, l.lower())),
+            'resolved': 'Closed' in issue.labels,
             'comments': model.TrackerIssueComment.gql('WHERE issue_id = :1 ORDER BY date_created', issue_id).fetch(100),
         })
 
 
 class CommentAction(Action):
     def post(self):
-        labels = [l for l in self.rh.request.get('labels').split(',') if l.strip()]
+        labels = [l.strip() for l in self.rh.request.get('labels').split(',') if l.strip()]
+
+        for l in ('Open', 'Closed'):
+            if l in labels:
+                labels.remove(l)
+
+        if self.rh.request.get('resolved'):
+            labels.append('Closed')
+        else:
+            labels.append('Open')
 
         issue_id = int(self.rh.request.get('id', '0'))
         issues.add_comment(issue_id, users.get_current_user(), self.rh.request.get('text'), labels=labels)
