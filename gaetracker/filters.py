@@ -39,5 +39,5 @@ def extra_column(issue, b):
         if label.startswith(prefix):
             v = label[len(prefix):]
             path = os.environ['PATH_INFO']
-            return u'<a href="%s?action=list&amp;label=%s">%s</a>' % (path, label, v)
+            return u'<a href="%s?action=list&amp;label=%s" title="Show label: %s">%s</a>' % (path, label, label, v)
     return ''
