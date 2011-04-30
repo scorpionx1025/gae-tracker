@@ -26,7 +26,6 @@ class SubmitAction(Action):
     def get(self):
         self.render({
             'issue': self.get_issue(),
-            'path': self.rh.request.path,
         })
 
     def post(self):
@@ -83,8 +82,6 @@ class ViewAction(Action):
         self.render({
             'issue': issue,
             'comments': model.TrackerIssueComment.gql('WHERE issue_id = :1 ORDER BY date_created', issue_id).fetch(100),
-            'user': users.get_current_user(),
-            'path': self.rh.request.path,
         })
 
 
@@ -120,7 +117,6 @@ class ListAction(Action):
 
         self.render({
             'issues': issues,
-            'path': self.rh.request.path,
             'filter': label,
             'columns': self.get_columns(issues),
         })
@@ -200,6 +196,8 @@ class Tracker(webapp.RequestHandler):
             self.reply('Don\'t know how to handle action "%s".' % action)
 
     def render(self, template_name, data, content_type='text/html'):
+        data['path'] = self.request.path
+        data['user'] = users.get_current_user()
         logging.debug(u'Data for %s: %s' % (template_name, data))
         filename = os.path.join(os.path.dirname(__file__), 'templates', template_name)
         self.reply(template.render(filename, data), content_type=content_type)
