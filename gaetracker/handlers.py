@@ -64,7 +64,11 @@ class EditAction(SubmitAction):
     template = 'edit.tpl'
 
     def get_issue(self):
-        return model.TrackerIssue.gql('WHERE id = :1', int(self.rh.request.get('id'))).get()
+        issue_id = int(self.rh.request.get('id'))
+        issue = model.TrackerIssue.gql('WHERE id = :1', issue_id).get()
+        if issue is None:
+            raise Exception('Issue %u does not exist.' % issue_id)
+        return issue
 
 
 class ViewAction(Action):
@@ -141,7 +145,7 @@ class Tracker(webapp.RequestHandler):
             self.reply('Don\'t know how to handle action "%s".' % action)
 
     def render(self, template_name, data, content_type='text/html'):
-        logging.debug(data)
+        logging.debug(u'Data for %s: %s' % (template_name, data))
         filename = os.path.join(os.path.dirname(__file__), 'templates', template_name)
         self.reply(template.render(filename, data), content_type=content_type)
 
