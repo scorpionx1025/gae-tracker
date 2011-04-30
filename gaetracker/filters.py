@@ -2,6 +2,7 @@
 
 import hashlib
 import logging
+import os
 
 from google.appengine.ext import webapp
 
@@ -29,3 +30,14 @@ def format_label(label, path):
         prefix, label = label.split('-', 1)
         prefix += ': '
     return u'%s<a href="%s">%s</a>' % (prefix, link, label)
+
+
+@register.filter
+def extra_column(issue, b):
+    prefix = b + '-'
+    for label in issue.labels:
+        if label.startswith(prefix):
+            v = label[len(prefix):]
+            path = os.environ['PATH_INFO']
+            return u'<a href="%s?action=list&amp;label=%s">%s</a>' % (path, label, v)
+    return ''

@@ -115,11 +115,23 @@ class ListAction(Action):
             issues = model.TrackerIssue.gql('WHERE labels = :1 ORDER BY date_created DESC', label).fetch(1000)
         else:
             issues = model.TrackerIssue.all().order('-date_created').fetch(1000)
+
         self.render({
             'issues': issues,
             'path': self.rh.request.path,
             'filter': label,
+            'columns': self.get_columns(issues),
         })
+
+    def get_columns(self, issues):
+        columns = []
+        for issue in issues:
+            for label in issue.labels:
+                if '-' in label:
+                    k, v = label.split('-', 1)
+                    if k not in columns:
+                        columns.append(k)
+        return sorted(columns)
 
 
 class Tracker(webapp.RequestHandler):
