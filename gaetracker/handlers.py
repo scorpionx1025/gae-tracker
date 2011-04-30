@@ -72,20 +72,7 @@ class ViewAction(Action):
 class CommentAction(Action):
     def post(self):
         issue_id = int(self.rh.request.get('id', '0'))
-        if not issue_id:
-            raise Exception('Issue id not specified.')
-
-        issue = model.TrackerIssue.gql('WHERE id = :1', issue_id).get()
-        if issue is None:
-            raise Exception('Issue %u does not exist.' % issue_id)
-
-        comment = model.TrackerIssueComment(issue_id=issue_id)
-        author = users.get_current_user()
-        if author is not None:
-            comment.author = author
-        comment.text = self.rh.request.get('text')
-        comment.put()
-
+        issues.add_comment(issue_id, users.get_current_user(), self.rh.request.get('text'))
         self.rh.redirect(self.rh.request.path + '?action=view&id=' + str(issue_id))
 
 
