@@ -10,6 +10,8 @@
     {% if issue.id %}
       <link rel="alternate" type="application/x-wiki" title="Edit" href="{{ path }}?action=edit&amp;id={{ issue.id }}" />
     {% endif %}
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+    <script type="text/javascript" src="/gae-tracker/static/scripts.js"></script>
   </head>
 <body>
 <h1>{% block title %}Simple Tracker{% endblock %}</h1>
