@@ -8,6 +8,7 @@ from google.appengine.dist import use_library
 use_library('django', '0.96')
 
 from django.utils import simplejson
+from google.appengine.api import mail
 from google.appengine.api import taskqueue
 from google.appengine.api import users
 
@@ -30,6 +31,30 @@ def get_issue_by_id(issue_id, create=False):
         else:
             issue.id = last.id + 1
     return issue
+
+
+def notify_update(issue, sender):
+    """Notifies everybody who participated in the issue that it was updated."""
+    emails = []
+    if issue.author:
+        emails.append(issue.author.email())
+    if issue.owner:
+        emails.append(issue.owner.email())
+    for comment in model.TrackerIssueComment.gql('WHERE issue_id = :1', issue.id).fetch(1000):
+        if comment.author:
+            emails.append(comment.author.email())
+
+    emails = list(set(emails)) # remove duplicates
+
+    if sender.email() in emails:
+        emails.remove(sender.email())
+
+    subject = u'Re: Issue %u: %s' % (issue.id, issue.summary)
+    url = 'http://' + os.environ['SERVER_NAME'] + os.environ['PATH_INFO'] + '?action=view&id=' + str(issue.id)
+    body = "The issue was updated, see details at:\n\n%s" % (url)
+
+    for email in emails:
+        mail.send_mail(sender.email(), email, subject, body)
 
 
 def update(data, create=False):
@@ -68,6 +93,8 @@ def add_comment(issue_id, author, text, labels=None):
     issue.date_updated = datetime.datetime.now()
     issue.comment_count = model.TrackerIssueComment.gql('WHERE issue_id = :1', issue.id).count()
     issue.put()
+
+    notify_update(issue, author)
 
 
 def import_all(data, delayed=True):
