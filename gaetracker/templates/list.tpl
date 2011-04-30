@@ -34,5 +34,7 @@
     {% endfor %}
   </tbody>
 </table>
+
+<p><a href="{{ path }}?action=dump{% if filter %}&amp;label={{ filter|escape }}{% endif %}">Download these issues</a></p>
 {% endif %}
 {% endblock %}
