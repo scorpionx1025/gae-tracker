@@ -36,6 +36,10 @@
         <div class="field">
           <textarea name="text" class="text"></textarea>
         </div>
+        <div class="field">
+          <label>New labels:</label>
+          <input type="text" name="labels" class="text" value="{% if issue.labels %}{% for label in issue.labels %}{{ label|escape }}{% if forloop.last %}{% else %}, {% endif %}{% endfor %}{% endif %}"/>
+        </div>
         <input type="submit" value="Comment"/> or <a href="{{ path }}">go back to list</a>
       </form>
     </div>

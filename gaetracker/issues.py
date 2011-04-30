@@ -51,17 +51,20 @@ def update(data, create=False):
     return issue
 
 
-def add_comment(issue_id, author, text):
+def add_comment(issue_id, author, text, labels=None):
     issue = model.TrackerIssue.gql('WHERE id = :1', int(issue_id)).get()
     if issue is None:
         raise Exception('Issue %s does not exist.', issue_id)
 
-    comment = model.TrackerIssueComment(issue_id=issue_id)
-    if author is not None:
-        comment.author = author
-    comment.text = text
-    comment.put()
+    if text.strip():
+        comment = model.TrackerIssueComment(issue_id=issue_id)
+        if author is not None:
+            comment.author = author
+        comment.text = text
+        comment.put()
 
+    if labels is not None:
+        issue.labels = labels
     issue.date_updated = datetime.datetime.now()
     issue.comment_count = model.TrackerIssueComment.gql('WHERE issue_id = :1', issue.id).count()
     issue.put()

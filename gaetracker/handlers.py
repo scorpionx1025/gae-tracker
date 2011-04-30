@@ -74,8 +74,10 @@ class ViewAction(Action):
 
 class CommentAction(Action):
     def post(self):
+        labels = [l for l in self.rh.request.get('labels').split(',') if l.strip()]
+
         issue_id = int(self.rh.request.get('id', '0'))
-        issues.add_comment(issue_id, users.get_current_user(), self.rh.request.get('text'))
+        issues.add_comment(issue_id, users.get_current_user(), self.rh.request.get('text'), labels=labels)
         self.rh.redirect(self.rh.request.path + '?action=view&id=' + str(issue_id))
 
 
