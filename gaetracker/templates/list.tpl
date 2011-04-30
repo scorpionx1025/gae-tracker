@@ -14,6 +14,7 @@
         <th class="extra">{{ c }}</th>
       {% endfor %}
       <th class="summary">Summary</th>
+      <th class="comments">Comments</th>
       <th class="date">Date</th>
     </tr>
   </thead>
@@ -29,6 +30,7 @@
           <td class="extra">{{ issue|extra_column:c }}</td>
         {% endfor %}
         <td class="summary"><a href="{{ path }}?action=view&amp;id={{ issue.id }}">{{ issue.summary|escape }}</a>{{ issue|extra_labels }}</td>
+        <td class="comments">{% if issue.comment_count %}{{ issue.comment_count }}{% endif %}</td>
         <td class="date">{{ issue.date_created|date:"d.m.y" }}</td>
       </tr>
     {% endfor %}
