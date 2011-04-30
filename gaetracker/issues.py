@@ -37,6 +37,10 @@ def update(data):
         if k in ('date_created', 'date_updated'):
             v = datetime.datetime.strptime(v, '%Y-%m-%d %H:%M:%S')
         setattr(issue, k, v)
+
+    if issue.id:
+        issue.comment_count = model.TrackerIssueComment.gql('WHERE issue_id = :1', issue.id).count()
+
     issue.put()
     return issue
 
