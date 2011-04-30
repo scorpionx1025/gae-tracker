@@ -1,7 +1,5 @@
 # encoding=utf-8
 
-import datetime
-import json
 import logging
 import os
 
@@ -10,6 +8,7 @@ from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 
+import issues
 import model
 
 
@@ -155,7 +154,7 @@ class DumpAction(Action):
             'description': i.description,
             'labels': i.labels,
         } for i in issues.fetch(1000)]
-        self.rh.reply(json.dumps(data, ensure_ascii=False, indent=True))
+        self.rh.reply(simplejson.dumps(data, ensure_ascii=False, indent=True))
 
 
 class UploadAction(Action):
@@ -166,21 +165,13 @@ class UploadAction(Action):
 
     def post(self):
         data = simplejson.loads(self.rh.request.get('dump'))
-        self.import_data(data)
+        issues.import_all(data)
         self.rh.redirect(self.rh.request.path)
 
-    def import_data(self, data):
-        for item in data:
-            issue = model.TrackerIssue.gql('WHERE id = :1', item['id']).get()
-            if issue is None:
-                issue = model.TrackerIssue(id=item['id'])
-            for k, v in item.items():
-                if k in ('author', 'owner'):
-                    v = users.User(v)
-                if k in ('date_created', 'date_updated'):
-                    v = datetime.datetime.strptime(v, '%Y-%m-%d %H:%M:%S')
-                setattr(issue, k, v)
-            issue.put()
+
+class ImportOneAction(Action):
+    def post(self):
+        issues.import_one(simplejson.loads(self.rh.request.get('data')))
 
 
 class Tracker(webapp.RequestHandler):
@@ -192,6 +183,7 @@ class Tracker(webapp.RequestHandler):
         'submit': SubmitAction,
         'upload': UploadAction,
         'view': ViewAction,
+        'import-one': ImportOneAction,
     }
 
     def get(self):
