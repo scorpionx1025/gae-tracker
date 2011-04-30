@@ -30,7 +30,7 @@ p.meta span { visibility: hidden; }
 #issue .labels a { color: green; }
 
 table { border-collapse: collapse; width: 100%; }
-td, th { border-bottom: solid 1px #ccc; padding: 2px 4px; vertical-align: top; }
+td, th { border-bottom: solid 1px #ccc; padding: 2px 4px; vertical-align: middle; }
 thead th, tfoot th { color: gray; font-weight: normal; }
 table .id { text-align: right; }
 table .summary { text-align: left; width: 100%; }
