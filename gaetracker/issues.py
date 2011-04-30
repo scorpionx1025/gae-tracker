@@ -94,3 +94,16 @@ def export_json(label=None):
     } for i in issues.fetch(1000)]
 
     return simplejson.dumps(data, ensure_ascii=False, indent=True)
+
+
+def find_issues(label=None, closed=False):
+    """Finds issues with the specified label (or all).
+
+    Unless closed is set, hides issues with the Closed label."""
+    if label:
+        issues = model.TrackerIssue.gql('WHERE labels = :1 ORDER BY date_created DESC', label).fetch(1000)
+    else:
+        issues = model.TrackerIssue.all().order('-date_created').fetch(1000)
+    if not closed:
+        issues = [i for i in issues if 'Closed' not in i.labels]
+    return issues

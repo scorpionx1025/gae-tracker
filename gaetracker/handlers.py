@@ -81,15 +81,12 @@ class ListAction(Action):
 
     def get(self):
         label = self.rh.request.get('label')
-        if label:
-            issues = model.TrackerIssue.gql('WHERE labels = :1 ORDER BY date_created DESC', label).fetch(1000)
-        else:
-            issues = model.TrackerIssue.all().order('-date_created').fetch(1000)
+        issues_ = issues.find_issues(label, closed=self.rh.request.get('closed'))
 
         self.render({
-            'issues': issues,
+            'issues': issues_,
             'filter': label,
-            'columns': self.get_columns(issues),
+            'columns': self.get_columns(issues_),
         })
 
     def get_columns(self, issues):
