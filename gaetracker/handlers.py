@@ -136,7 +136,7 @@ class ListAction(Action):
         return sorted(columns)
 
 
-class DumpAction(Action):
+class ExportAction(Action):
     def get(self):
         label = self.rh.request.get('label')
         if label:
@@ -177,13 +177,13 @@ class ImportOneAction(Action):
 class Tracker(webapp.RequestHandler):
     handlers = {
         'comment': CommentAction,
-        'dump': DumpAction,
         'edit': EditAction,
+        'export': ExportAction,
+        'import-one': ImportOneAction,
         'list': ListAction,
         'submit': SubmitAction,
         'upload': UploadAction,
         'view': ViewAction,
-        'import-one': ImportOneAction,
     }
 
     def get(self):
