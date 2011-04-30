@@ -1,6 +1,7 @@
 # encoding=utf-8
 
 import datetime
+import logging
 import os
 
 from google.appengine.dist import use_library
@@ -38,7 +39,7 @@ def update(data, create=False):
         if k in('id', 'comment_count'):
             v = int(v)
         if k in ('author', 'owner'):
-            v = users.User(v)
+            v = v and users.User(v) or None
         if k in ('date_created', 'date_updated'):
             v = datetime.datetime.strptime(v, '%Y-%m-%d %H:%M:%S')
         setattr(issue, k, v)
@@ -68,9 +69,10 @@ def add_comment(issue_id, author, text):
 
 def import_all(data, delayed=True):
     path = os.environ['PATH_INFO']
+    logging.info('Importing %u issues.' % len(data))
     for item in data:
         if delayed:
-            taskqueue.add(url=path, params={ 'action': 'import-one', 'data': simplejson.dumps(item) })
+            taskqueue.add(url=path, name='import-issue-%u' % item['id'], params={ 'action': 'import-one', 'data': simplejson.dumps(item) })
         else:
             update(item)
 

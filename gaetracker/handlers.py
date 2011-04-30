@@ -123,7 +123,8 @@ class ImportAction(Action):
 
 class ImportOneAction(Action):
     def post(self):
-        issues.update(simplejson.loads(self.rh.request.get('data')), create=True)
+        issue = issues.update(simplejson.loads(self.rh.request.get('data')), create=True)
+        logging.info('Issue %u imported.' % issue.id)
 
 
 class Tracker(webapp.RequestHandler):
