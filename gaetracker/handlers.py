@@ -64,10 +64,10 @@ class ViewAction(Action):
 
     def get(self):
         issue_id = int(self.rh.request.get('id'))
-        issue = model.TrackerIssue.gql('WHERE id = :1', issue_id).get()
-        issue.labels = sorted(issue.labels, key=lambda l: ('-' not in l, l.lower()))
+        issue = issues.get_issue_by_id(issue_id)
         self.render({
             'issue': issue,
+            'labels': sorted(issue.labels, key=lambda l: ('-' not in l, l.lower())),
             'comments': model.TrackerIssueComment.gql('WHERE issue_id = :1 ORDER BY date_created', issue_id).fetch(100),
         })
 
@@ -123,7 +123,7 @@ class ImportAction(Action):
 
 class ImportOneAction(Action):
     def post(self):
-        issues.update(simplejson.loads(self.rh.request.get('data')))
+        issues.update(simplejson.loads(self.rh.request.get('data')), create=True)
 
 
 class Tracker(webapp.RequestHandler):

@@ -13,11 +13,13 @@ from google.appengine.api import users
 import model
 
 
-def get_issue_by_id(issue_id):
+def get_issue_by_id(issue_id, create=False):
     """Loads or creates an issue."""
     if issue_id:
         issue = model.TrackerIssue.gql('WHERE id = :1', int(issue_id)).get()
         if issue is None:
+            if not create:
+                raise Exception('Issue %u does not exist.' % issue_id)
             issue = model.TrackerIssue(id=int(issue_id))
     else:
         issue = model.TrackerIssue()
@@ -29,9 +31,9 @@ def get_issue_by_id(issue_id):
     return issue
 
 
-def update(data):
+def update(data, create=False):
     """Takes a dictionary of strings, parses and updates/creates the issue."""
-    issue = get_issue_by_id(data.get('id', None))
+    issue = get_issue_by_id(data.get('id', None), create=create)
     for k, v in data.items():
         if k in('id', 'comment_count'):
             v = int(v)
