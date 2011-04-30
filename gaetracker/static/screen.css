@@ -37,8 +37,8 @@ table .id { text-align: right; }
 table .summary { text-align: left; width: 100%; }
 table .summary a:first-child { margin-right: 1em; }
 table .summary .label { font-size: 10pt; color: green; }
-table tr:hover { background-color: #eee; }
-table tr:hover .id a, table tr:hover .summary a:first-child { color: #008; text-decoration: underline; }
+tbody tr:hover { background-color: #eee; }
+tbody tr:hover .id a, table tr:hover .summary a:first-child { color: #008; text-decoration: underline; }
 table .owner { text-align: center; }
 table .comments { text-align: right; }
 table .date { text-align: left; }
