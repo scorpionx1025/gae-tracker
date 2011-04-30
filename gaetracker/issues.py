@@ -3,6 +3,9 @@
 import datetime
 import os
 
+from google.appengine.dist import use_library
+use_library('django', '0.96')
+
 from django.utils import simplejson
 from google.appengine.api import taskqueue
 from google.appengine.api import users
