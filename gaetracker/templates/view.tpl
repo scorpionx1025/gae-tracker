@@ -10,7 +10,10 @@
 
     <ul class="labels">
       {% for label in issue.labels %}
-        <li>{{ label|format_label:path }}</li>
+        {% ifequal label "Open" %}
+        {% else %}
+          <li>{{ label|format_label:path }}</li>
+        {% endifequal %}
       {% endfor %}
     </ul>
 
