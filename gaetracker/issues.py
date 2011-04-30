@@ -33,7 +33,7 @@ def get_issue_by_id(issue_id, create=False):
     return issue
 
 
-def notify_update(issue, sender):
+def notify_update(issue, sender, comment_text=None):
     """Notifies everybody who participated in the issue that it was updated."""
     emails = []
     if issue.author:
@@ -52,6 +52,9 @@ def notify_update(issue, sender):
     subject = u'Re: Issue %u: %s' % (issue.id, issue.summary)
     url = 'http://' + os.environ['SERVER_NAME'] + os.environ['PATH_INFO'] + '?action=view&id=' + str(issue.id)
     body = "The issue was updated, see details at:\n\n%s" % (url)
+
+    if comment_text:
+        body += u'\n\nThe comment was:\n\n' + comment_text
 
     for email in emails:
         mail.send_mail(sender.email(), email, subject, body)
@@ -94,7 +97,7 @@ def add_comment(issue_id, author, text, labels=None):
     issue.comment_count = model.TrackerIssueComment.gql('WHERE issue_id = :1', issue.id).count()
     issue.put()
 
-    notify_update(issue, author)
+    notify_update(issue, author, comment_text=text)
 
 
 def import_all(data, delayed=True):
