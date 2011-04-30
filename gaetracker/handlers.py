@@ -1,9 +1,11 @@
 # encoding=utf-8
 
+import datetime
 import json
 import logging
 import os
 
+from django.utils import simplejson
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
@@ -156,14 +158,40 @@ class DumpAction(Action):
         self.rh.reply(json.dumps(data, ensure_ascii=False, indent=True))
 
 
+class UploadAction(Action):
+    template = 'upload.tpl'
+
+    def get(self):
+        self.render({ })
+
+    def post(self):
+        data = simplejson.loads(self.rh.request.get('dump'))
+        self.import_data(data)
+        self.rh.redirect(self.rh.request.path)
+
+    def import_data(self, data):
+        for item in data:
+            issue = model.TrackerIssue.gql('WHERE id = :1', item['id']).get()
+            if issue is None:
+                issue = model.TrackerIssue(id=item['id'])
+            for k, v in item.items():
+                if k in ('author', 'owner'):
+                    v = users.User(v)
+                if k in ('date_created', 'date_updated'):
+                    v = datetime.datetime.strptime(v, '%Y-%m-%d %H:%M:%S')
+                setattr(issue, k, v)
+            issue.put()
+
+
 class Tracker(webapp.RequestHandler):
     handlers = {
         'comment': CommentAction,
+        'dump': DumpAction,
         'edit': EditAction,
         'list': ListAction,
         'submit': SubmitAction,
+        'upload': UploadAction,
         'view': ViewAction,
-        'dump': DumpAction,
     }
 
     def get(self):
