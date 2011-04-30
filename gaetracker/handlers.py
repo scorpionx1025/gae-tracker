@@ -52,7 +52,7 @@ class SubmitAction(Action):
 
     def get_issue(self):
         issue = model.TrackerIssue()
-        issue.labels = [ 'Status-New' ]
+        issue.labels = [ 'Open' ]
         user = users.get_current_user()
         if user is not None:
             issue.author = user
