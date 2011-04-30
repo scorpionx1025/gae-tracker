@@ -105,23 +105,8 @@ class ListAction(Action):
 
 class ExportAction(Action):
     def get(self):
-        label = self.rh.request.get('label')
-        if label:
-            issues = model.TrackerIssue.gql('WHERE labels = :1 ORDER BY date_created DESC', label)
-        else:
-            issues = model.TrackerIssue.all().order('-date_created')
-
-        data = [{
-            'id': i.id,
-            'date_created': i.date_created.strftime('%Y-%m-%d %H:%M:%S'),
-            'date_updated': i.date_updated.strftime('%Y-%m-%d %H:%M:%S'),
-            'author': i.author and i.author.email(),
-            'owner': i.owner and i.owner.email(),
-            'summary': i.summary,
-            'description': i.description,
-            'labels': i.labels,
-        } for i in issues.fetch(1000)]
-        self.rh.reply(simplejson.dumps(data, ensure_ascii=False, indent=True))
+        data = issues.export_json(self.rh.request.get('label') or None)
+        self.rh.reply(data)
 
 
 class ImportAction(Action):

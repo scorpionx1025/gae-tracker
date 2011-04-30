@@ -68,3 +68,29 @@ def import_all(data, delayed=True):
             taskqueue.add(url=path, params={ 'action': 'import-one', 'data': simplejson.dumps(item) })
         else:
             update(item)
+
+
+def export_json(label=None):
+    if label:
+        issues = model.TrackerIssue.gql('WHERE labels = :1 ORDER BY date_created DESC', label)
+    else:
+        issues = model.TrackerIssue.all().order('-date_created')
+
+    data = [{
+        'id': i.id,
+        'date_created': i.date_created.strftime('%Y-%m-%d %H:%M:%S'),
+        'date_updated': i.date_updated.strftime('%Y-%m-%d %H:%M:%S'),
+        'author': i.author and i.author.email(),
+        'owner': i.owner and i.owner.email(),
+        'summary': i.summary,
+        'description': i.description,
+        'labels': i.labels,
+        'comment_count': i.comment_count,
+        'comments': [{
+            'date_created': c.date_created.strftime('%Y-%m-%d %H:%M:%S'),
+            'author': c and c.author.email(),
+            'text': c.text,
+        } for c in model.TrackerIssueComment.gql('WHERE issue_id = :1', i.id).fetch(1000)],
+    } for i in issues.fetch(1000)]
+
+    return simplejson.dumps(data, ensure_ascii=False, indent=True)
