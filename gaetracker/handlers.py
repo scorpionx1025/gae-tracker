@@ -157,8 +157,8 @@ class ExportAction(Action):
         self.rh.reply(simplejson.dumps(data, ensure_ascii=False, indent=True))
 
 
-class UploadAction(Action):
-    template = 'upload.tpl'
+class ImportAction(Action):
+    template = 'import.tpl'
 
     def get(self):
         self.render({ })
@@ -179,10 +179,10 @@ class Tracker(webapp.RequestHandler):
         'comment': CommentAction,
         'edit': EditAction,
         'export': ExportAction,
+        'import': ImportAction,
         'import-one': ImportOneAction,
         'list': ListAction,
         'submit': SubmitAction,
-        'upload': UploadAction,
         'view': ViewAction,
     }
 

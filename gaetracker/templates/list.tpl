@@ -37,6 +37,6 @@
   </tbody>
 </table>
 
-<p><a href="{{ path }}?action=export{% if filter %}&amp;label={{ filter|escape }}{% endif %}">Download these issues</a></p>
+<p><a href="{{ path }}?action=export{% if filter %}&amp;label={{ filter|escape }}{% endif %}">Download these issues</a> or <a href="{{ path }}?action=import">upload some</a></p>
 {% endif %}
 {% endblock %}
