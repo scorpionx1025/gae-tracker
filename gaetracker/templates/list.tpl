@@ -8,7 +8,7 @@
       <!--
       <th/>
       -->
-      <th/>
+      <th class="owner">Owner</th>
       <th class="id">Id</th>
       {% for c in columns %}
         <th class="extra">{{ c }}</th>
@@ -23,7 +23,7 @@
         <!--
         <td><input type="checkbox" name="key" value="{{ issue.key }}"/></td>
         -->
-        <td>{% if issue.owner %}<img src="{{ issue.owner|gravatar:24 }}" title="{{ issue.owner }}" alt="avatar"/>{% endif %}</td>
+        <td class="owner">{% if issue.owner %}<img src="{{ issue.owner|gravatar:24 }}" title="{{ issue.owner }}" alt="avatar"/>{% endif %}</td>
         <td class="id"><a href="{{ path }}?action=view&amp;id={{ issue.id }}">#{{ issue.id }}</a></td>
         {% for c in columns %}
           <td class="extra">{{ issue|extra_column:c }}</td>
