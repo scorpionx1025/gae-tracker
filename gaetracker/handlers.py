@@ -35,6 +35,10 @@ class SubmitAction(Action):
         data = dict([(x, self.rh.request.get(x)) for x in self.rh.request.arguments()])
         if 'labels' in data:
             data['labels'] = [l.strip() for l in data['labels'].split(',') if l.strip()]
+        if not data.get('id'):
+            user = users.get_current_user()
+            if user:
+                data['author'] = user.email()
         issue = issues.update(data)
         self.rh.redirect(self.rh.request.path + '?action=view&id=' + str(issue.id))
 
