@@ -29,26 +29,10 @@ class SubmitAction(Action):
         })
 
     def post(self):
-        issue = self.get_issue()
-
-        for k in self.rh.request.arguments():
-            v = self.rh.request.get(k)
-            if k == 'f.labels':
-                issue.labels = [l.strip() for l in v.split(',') if l.strip()]
-            elif k == 'f.owner':
-                if v:
-                    issue.owner = users.User(v)
-            elif k.startswith('f.'):
-                setattr(issue, k[2:], v)
-
-        last = model.TrackerIssue.all().order('-id').get()
-        if last is None:
-            issue.id = 1
-        else:
-            issue.id = last.id + 1
-
-        issue.put()
-
+        data = dict([(x, self.rh.request.get(x)) for x in self.rh.request.arguments()])
+        if 'labels' in data:
+            data['labels'] = [l.strip() for l in data['labels'].split(',') if l.strip()]
+        issue = issues.update(data)
         self.rh.redirect(self.rh.request.path + '?action=view&id=' + str(issue.id))
 
     def get_issue(self):
@@ -167,7 +151,7 @@ class ImportAction(Action):
 
 class ImportOneAction(Action):
     def post(self):
-        issues.import_one(simplejson.loads(self.rh.request.get('data')))
+        issues.update(simplejson.loads(self.rh.request.get('data')))
 
 
 class Tracker(webapp.RequestHandler):
