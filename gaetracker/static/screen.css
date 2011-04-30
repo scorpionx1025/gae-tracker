@@ -1,5 +1,5 @@
 body { margin: 20px; padding: 0; background-color: white; color: black; }
-body, table { font-family: Ubuntu, sans-serif; font-size: 11pt; line-height: 1.25em; }
+body, table { font-family: Ubuntu, sans-serif; font-size: 10pt; line-height: 1.25em; }
 
 h1 { font: 20pt/25pt bold Ubuntu, sans-serif; }
 h2 { font: 14pt/20pt bold Ubuntu, sans-serif; }
