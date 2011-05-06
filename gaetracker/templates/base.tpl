@@ -15,7 +15,7 @@
   </head>
 <body>
 <div id="header">
-  <h1>{% block title %}Список дел{% endblock %}<small>{% block tlinks %}{% endblock %}</small></h1>
+  <h1>{% block title %}<a href="{{ path }}">Список дел</a>{% endblock %}<small>{% block tlinks %}{% endblock %}</small></h1>
 </div>
 {% block contents %}No contents.{% endblock %}
 </body>
