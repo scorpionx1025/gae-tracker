@@ -1,13 +1,15 @@
 body { margin: 10px; padding: 0; background-color: white; color: black; }
 body, table { font-family: Ubuntu, sans-serif; font-size: 10pt; line-height: 1.25em; }
 
-h1 { font: 16pt/16pt bold Ubuntu, sans-serif; margin: 0 0 .25em; }
+h1 { font: 16pt/16pt bold Ubuntu, sans-serif; margin: 0 0 .5em; }
 h2 { font: 14pt/20pt bold Ubuntu, sans-serif; }
 a { color: #008; }
 img { border: none; }
 
 h1 small { margin-left: 1em; font: normal 10pt sans-serif; }
 h1 small a { color: green; }
+
+#header { border-bottom: solid 1px #ccc; }
 
 div.field { margin: .5em 0 1em; }
 div.field label { display: block; margin: .25em 0; }
@@ -48,16 +50,21 @@ table .date { text-align: left; }
 
 
 #cells { width: 100%; }
-#cells h2 a { color: inherit; }
+#cells h2 { font-size: 10pt; line-height: 1em; margin: 0.5em 0; }
+#cells h2 a { color: inherit; font-weight: bold; }
 #cells h2 a.a { color: green; font-weight: normal; margin-left: 1em; }
-.cell { width: 50%; float: height: 240px; margin-bottom: 10px; float: left; }
-.incell { width: 90%; border: solid 2px gray; height: 220px; overflow: hidden; }
-.incell > * { margin: 10px; }
-.incell h2 { font: bold 1em sans-serif; }
-.incell ul { padding: 0; list-style-type: none; }
-.incell li { line-height: 1.5em; white-space: nowrap; }
 
-#pri1 .incell { border: solid 2px red; }
-#pri2 .incell { border: solid 2px orange; }
-#pri3 .incell { border: solid 2px green; }
-#pri4 .incell { border: solid 2px gray; }
+.cell { width: 45%; height: 250px; float: left; }
+.cell ul { margin: 0; padding: 0; list-style-type: none; padding-bottom: 1em; }
+.cell li { line-height: 1.5em; }
+
+/*
+.cell ul { height: 7em; overflow: hidden; }
+*/
+
+#pri1 li a { color: red; }
+#pri2 li a { color: orange; }
+#pri3 li a { color: green; }
+#pri4 li a { color: gray; }
+
+#pri3 .cell, #pri4 .cell { height: auto; }
