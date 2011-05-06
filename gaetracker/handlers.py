@@ -2,6 +2,7 @@
 
 import logging
 import os
+import re
 
 from google.appengine.dist import use_library
 use_library('django', '0.96')
@@ -13,6 +14,11 @@ from google.appengine.ext.webapp import template
 
 import issues
 import model
+
+
+def parse_labels(labels):
+    labels = list(set(re.split('[, ]+', labels)))
+    return sorted([l for l in labels if l])
 
 
 class Action:
@@ -34,7 +40,7 @@ class SubmitAction(Action):
     def post(self):
         data = dict([(x, self.rh.request.get(x)) for x in self.rh.request.arguments()])
         if 'labels' in data:
-            data['labels'] = [l.strip() for l in data['labels'].split(',') if l.strip()]
+            data['labels'] = parse_labels(data['labels'])
         if not data.get('id'):
             user = users.get_current_user()
             if user:
@@ -79,7 +85,7 @@ class ViewAction(Action):
 
 class CommentAction(Action):
     def post(self):
-        labels = [l.strip() for l in self.rh.request.get('labels').split(',') if l.strip()]
+        labels = parse_labels(self.rh.request.get('labels'))
 
         for l in ('Open', 'Closed'):
             if l in labels:
