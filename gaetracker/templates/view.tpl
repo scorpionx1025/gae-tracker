@@ -1,5 +1,9 @@
 {% extends "base.tpl" %}
+
 {% block title %}{{ issue.summary }}{% endblock %}
+
+{% block tlinks %}<a href="{{ path }}">другие дела</a>{% endblock %}
+
 {% block contents %}
   <div id="issue">
     {% if issue.author %}

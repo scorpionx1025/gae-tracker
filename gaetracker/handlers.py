@@ -136,7 +136,7 @@ class TableAction(ListAction):
 
     def get(self):
         label = self.rh.request.get('label')
-        issues_ = issues.find_issues(label, closed=self.rh.request.get('closed'))
+        issues_ = sorted(issues.find_issues(label, closed=self.rh.request.get('closed')), key=lambda i: i.summary)
 
         data = [
             { 'pri': '1', 'title': u'Важно и срочно', 'issues': [] },
