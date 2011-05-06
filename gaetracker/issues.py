@@ -146,4 +146,11 @@ def find_issues(label=None, closed=False):
         issues = model.TrackerIssue.all().order('-date_created').fetch(1000)
     if not closed:
         issues = [i for i in issues if 'Closed' not in i.labels]
-    return issues
+    return [fix_priority_labels(i) for i in issues]
+
+
+def fix_priority_labels(issue):
+    plabels = [l for l in issue.labels if l.lower().startswith('pri-')]
+    if not plabels:
+        issue.labels.append('Pri-4')
+    return issue
