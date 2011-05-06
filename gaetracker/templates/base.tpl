@@ -14,7 +14,7 @@
     <script type="text/javascript" src="/gae-tracker/static/scripts.js"></script>
   </head>
 <body>
-<h1>{% block title %}Simple Tracker{% endblock %}</h1>
+<h1>{% block title %}Simple Tracker{% endblock %}<small>{% block tlinks %}{% endblock %}</small></h1>
 {% block contents %}No contents.{% endblock %}
 </body>
 </html>

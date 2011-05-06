@@ -1,6 +1,6 @@
 {% extends "base.tpl" %}
 {% block contents %}
-<p><a href="{{ path }}?action=submit">Submit new issue</a>{% if filter %} or <a href="{{ path }}">reset filter</a>{% endif %}</p>
+<p><a href="{{ path }}?action=submit">Submit new issue</a>{% if filter %} or <a href="{{ path }}?action=list">reset filter</a>{% endif %}</p>
 {% if issues %}
 <table>
   <thead>

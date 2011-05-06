@@ -15,6 +15,8 @@ from google.appengine.ext.webapp import template
 import issues
 import model
 
+DEFAULT_ACTION = 'table'
+
 
 def parse_labels(labels):
     labels = list(set(re.split('[, ]+', labels)))
@@ -125,6 +127,30 @@ class ListAction(Action):
         return sorted(columns)
 
 
+class TableAction(ListAction):
+    template = 'table.tpl'
+
+    def get(self):
+        label = self.rh.request.get('label')
+        issues_ = issues.find_issues(label, closed=self.rh.request.get('closed'))
+
+        data = [
+            { 'pri': '1', 'title': u'Важно и срочно', 'issues': [] },
+            { 'pri': '2', 'title': u'Важно, не срочно', 'issues': [] },
+            { 'pri': '3', 'title': u'Срочно, не важно', 'issues': [] },
+            { 'pri': '4', 'title': u'Ни срочно, ни важно', 'issues': [] },
+        ]
+        for issue in issues_:
+            pri = [int(l[4:]) for l in issue.labels if l.lower().startswith('pri-')][0]
+            if pri >= 1 and pri <= 4:
+                data[pri-1]['issues'].append(issue)
+
+        self.render({
+            'filter': label,
+            'data': data,
+        })
+
+
 class ExportAction(Action):
     def get(self):
         data = issues.export_json(self.rh.request.get('label') or None)
@@ -149,15 +175,26 @@ class ImportOneAction(Action):
         logging.info('Issue %u imported.' % issue.id)
 
 
+class FixPriorityAction(Action):
+    def get(self):
+        for issue in issues.find_issues():
+            labels = list(issue.labels)
+            issues.fix_priority_labels(issue)
+            if labels != issue.labels:
+                issue.put()
+
+
 class Tracker(webapp.RequestHandler):
     handlers = {
         'comment': CommentAction,
         'edit': EditAction,
         'export': ExportAction,
+        'fixpriority': FixPriorityAction,
         'import': ImportAction,
         'import-one': ImportOneAction,
         'list': ListAction,
         'submit': SubmitAction,
+        'table': TableAction,
         'view': ViewAction,
     }
 
@@ -168,7 +205,7 @@ class Tracker(webapp.RequestHandler):
         self.call('post')
 
     def call(self, method):
-        action = self.request.get('action', 'list')
+        action = self.request.get('action', DEFAULT_ACTION)
         if action in self.handlers:
             getattr(self.handlers[action](self), method)()
         else:
