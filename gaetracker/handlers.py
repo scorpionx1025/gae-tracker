@@ -35,8 +35,11 @@ class SubmitAction(Action):
     template = 'submit.tpl'
 
     def get(self):
+        issue = self.get_issue()
+        if self.rh.request.get('labels'):
+            issue.labels.append(self.rh.request.get('labels'))
         self.render({
-            'issue': self.get_issue(),
+            'issue': issue,
         })
 
     def post(self):
@@ -48,7 +51,8 @@ class SubmitAction(Action):
             if user:
                 data['author'] = user.email()
         issue = issues.update(data)
-        self.rh.redirect(self.rh.request.path + '?action=view&id=' + str(issue.id))
+        self.rh.redirect(self.rh.request.path + '?action=' + DEFAULT_ACTION)
+        #self.rh.redirect(self.rh.request.path + '?action=view&id=' + str(issue.id))
 
     def get_issue(self):
         issue = model.TrackerIssue()
