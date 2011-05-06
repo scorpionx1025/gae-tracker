@@ -24,7 +24,13 @@
         <!--
         <td><input type="checkbox" name="key" value="{{ issue.key }}"/></td>
         -->
-        <td class="owner">{% if issue.owner %}<img src="{{ issue.owner|gravatar:24 }}" title="{{ issue.owner }}" alt="avatar"/>{% endif %}</td>
+        <td class="owner">
+          {% if issue.owner %}
+            {% ifequal issue.owner.email user.email %}{% else %}
+              <img src="{{ issue.owner|gravatar:24 }}" title="{{ issue.owner }}" alt="avatar"/>
+            {% endifequal %}
+          {% endif %}
+        </td>
         <td class="id"><a href="{{ path }}?action=view&amp;id={{ issue.id }}">#{{ issue.id }}</a></td>
         {% for c in columns %}
           <td class="extra">{{ issue|extra_column:c }}</td>
